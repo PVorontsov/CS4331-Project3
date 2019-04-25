@@ -73,7 +73,7 @@
                 var nodeString = 'Type: ' + d.nodeType + '\r\nName: ' + d.name + '\r\nID: ' + d.id;
                 if (d.nodeType === 'service') nodeString += '\r\nHost: ' + d.host;
                 if (d.nodeType === 'attack') {
-                    nodeString += 'Host IP: ' + d.host + '\r\nSource IP: ' + d.sourceIP + '\r\nService: '+ d.id.split('-')[4]
+                    nodeString += '\r\nHost IP: ' + d.host + '\r\nSource IP: ' + d.sourceIP + '\r\nService: '+ d.id.split('-')[4]
                         +'\r\nDate: ' + d.date + '\r\nTime: ' + d.id.split('-')[3] + '\r\nIDS Detection: ' + d.ids_detection
                         +'\r\nMalware Detection: ' + d.malware_detection + '\r\nShell Code Detection: ' + d.shellCode_detection;
                 }

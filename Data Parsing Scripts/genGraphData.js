@@ -33,7 +33,6 @@ fs.readFile(fileNameTxt, (err, data) => {
     var destIPSet = new Set();
     var serviceSet = new Set();
     var attackSet = new Set();
-    var attackString = '';
     for (var i = 0; i < lineArray.length - 1; ++i) {
         var valueArray = lineArray[i].split('\t');
         if (parseInt(valueArray[17]) === -1 && (parseInt(valueArray[14]) + parseInt(valueArray[15]) + parseInt(valueArray[16]) !== 0)) {
@@ -46,23 +45,11 @@ fs.readFile(fileNameTxt, (err, data) => {
             // name format: ATT-last 4 of destIP-last 4 of sourceIP-service
 
             var detectedIDS =  valueArray[14] != '0' ? 'Yes' : 'No';
-            var detectedMalware = valueArray[15] != '0' ? 'Yes' : 'No';
+            var detectedMalware = valueArray[15] != '0' ? ('Yes (' + valueArray[15].split('(')[0] + ')') : 'No';
             var detectedShellCode = valueArray[16] != '0' ? 'Yes' : 'No';
-
-            // var attackTypeStr = '';
-            // if (detectedIDS === 'Yes') attackTypeStr += 'ids';
-            // if (detectedMalware === 'Yes') {
-            //     if (attackTypeStr.length > 0) attackTypeStr += '/';
-            //     attackTypeStr += 'mal';
-            // }
-            // if (detectedShellCode === 'Yes') {
-            //     if (attackTypeStr.length > 0) attackTypeStr += '/';
-            //     attackTypeStr += "shc";
-            // }
 
             // Generate attack nodes
             attackSet.add('ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[22] + '-'  + valueArray[1] + '-' + valueArray[18].split(':')[7] + '-' + dataDate + '-' + valueArray[20] + '-' + valueArray[18] + '-' + detectedIDS + '-' + detectedMalware + '-' + detectedShellCode);
-            // attackString += '{\"nodeType\": \"attack\", \"id\": \"ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[22] + '-'  + valueArray[1] + '\", \"name\": \"ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[18].split(':')[7] + '-' + valueArray[1] + '\", \"date\": \"' + dataDate + '\", \"host\": \"' + valueArray[20] +'\", \"sourceIP\": \"' + valueArray[18] + '\", \"ids_detection\": \"' + detectedIDS + '\", \"malware_detection\": \"' + detectedMalware + '\", \"shellCode_detection\": \"' + detectedShellCode + '\"},';
         }
     }
 
@@ -75,13 +62,13 @@ fs.readFile(fileNameTxt, (err, data) => {
         dataString += '{\"nodeType\": \"service\", \"id\": \"' + item + '\", \"name\": \"' + item.split('-')[0] + '\", \"host\": \"' + item.split('-')[1] + '\"},';
     }
 
+    //Output attack nodes
     for (var item of attackSet) {
         var argArr = item.split('-');
-        dataString += '{\"nodeType\": \"attack\", \"id\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[2] + '-'  + argArr[3] + '\", \"name\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[3] + '\", \"date\": \"' + argArr[6] + '-' + argArr[7] + '-' + argArr[5] + '\", \"host\": \"' + argArr[8] +'\", \"sourceIP\": \"' + argArr[9] + '\", \"ids_detection\": \"' + argArr[10] + '\", \"malware_detection\": \"' + argArr[11] + '\", \"shellCode_detection\": \"' + argArr[12] + '\"},';
+        dataString += '{\"nodeType\": \"attack\", \"id\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[2] + '-'  + argArr[3] + '\", \"name\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[3] + '\", \"date\": \"' + argArr[6] + '-' + argArr[7] + '-' + argArr[5] + '\", \"host\": \"' + argArr[8] +'\", \"sourceIP\": \"' + argArr[9] + '\", \"ids_detection\": \"' + argArr[10] + '\", \"malware_detection\": \"'; 
+        if (argArr[11] !=='No') dataString += argArr[11] + argArr[12] + '\", \"shellCode_detection\": \"' + argArr[13] + '\"},';
+        else dataString += argArr[11] + '\", \"shellCode_detection\": \"' + argArr[12] + '\"},';
     }
-
-    // Concatenate the attackString to the dataString
-    // dataString += attackString;
 
     // Remove last comma
     dataString = dataString.substring(0, dataString.length - 1);
