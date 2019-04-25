@@ -1,4 +1,4 @@
-Scripts to Parse the raw text data into a usable JSON format
+Scripts to parse the raw text data into nice JSON files.
 
 ### Instructions: 
 
