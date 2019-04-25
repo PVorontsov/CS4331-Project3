@@ -23,3 +23,8 @@ Some of the infomation available in the data is listen below:
   * Shellcode detection
   
 For our visualization, we would like to show the connections in the data using networks.  The main relationships we want to show are different types of attacks (malware, shell code, etc.) that are launched on the different types of services (SMTP, DNS, HTTP, etc.) hosted by the various nodes on the cluster. Another possible interesting relationship we could visualize include the types of attacks and types of services attacked with the attacks originating from the same source IP addresses. In addition, we could add another dimension to the visualization by adding a time selector allowing the user to visualize the changes in the frequency and type of attacks over a given time period.
+
+* Visualizations:
+ * Graph showing attacks grouped by the service they target on different host
+ * Graph visualizing attacks originating from the same source IP addresses
+ * A time compenent for both graphs allowing the user to visualize how the type and source of attacks has changed over time
