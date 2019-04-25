@@ -66,7 +66,7 @@ fs.readFile(fileNameTxt, (err, data) => {
     for (var item of attackSet) {
         var argArr = item.split('-');
         dataString += '{\"nodeType\": \"attack\", \"id\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[2] + '-'  + argArr[3] + '\", \"name\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[3] + '\", \"date\": \"' + argArr[6] + '-' + argArr[7] + '-' + argArr[5] + '\", \"host\": \"' + argArr[8] +'\", \"sourceIP\": \"' + argArr[9] + '\", \"ids_detection\": \"' + argArr[10] + '\", \"malware_detection\": \"'; 
-        if (argArr[11] !=='No') dataString += argArr[11] + argArr[12] + '\", \"shellCode_detection\": \"' + argArr[13] + '\"},';
+        if (argArr[11] !=='No') dataString += argArr[11] + '-' + argArr[12] + '\", \"shellCode_detection\": \"' + argArr[13] + '\"},';
         else dataString += argArr[11] + '\", \"shellCode_detection\": \"' + argArr[12] + '\"},';
     }
 

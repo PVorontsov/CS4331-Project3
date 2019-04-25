@@ -3959,7 +3959,7 @@
 		"host": "fda2:69aa:1f1a:bae0:3f5d:1698:588f:0322",
 		"sourceIP": "fda2:69aa:1f1a:3aef:7af3:3027:3045:7ff2",
 		"ids_detection": "No",
-		"malware_detection": "Yes (Html.Phishing.Pay190)",
+		"malware_detection": "Yes (Html.Phishing.Pay-190)",
 		"shellCode_detection": "No"
 	}, {
 		"nodeType": "attack",
@@ -4149,7 +4149,7 @@
 		"host": "fda2:69aa:1f1a:bae0:3f5d:1698:588f:0322",
 		"sourceIP": "fda2:69aa:1f1a:3aef:7af3:3027:3045:7ff2",
 		"ids_detection": "No",
-		"malware_detection": "Yes (Html.Phishing.Pay190)",
+		"malware_detection": "Yes (Html.Phishing.Pay-190)",
 		"shellCode_detection": "No"
 	}, {
 		"nodeType": "attack",
@@ -4349,7 +4349,7 @@
 		"host": "fda2:69aa:1f1a:bae0:3f5d:1698:588f:0322",
 		"sourceIP": "fda2:69aa:1f1a:3aef:7af3:3027:3045:7ff2",
 		"ids_detection": "No",
-		"malware_detection": "Yes (Html.Phishing.Pay190)",
+		"malware_detection": "Yes (Html.Phishing.Pay-190)",
 		"shellCode_detection": "No"
 	}, {
 		"nodeType": "attack",
