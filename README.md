@@ -10,7 +10,7 @@ The raw data is scource is from here: http://www.takakura.com/Kyoto_data/new_dat
 
 A description of the data can be found here: http://www.takakura.com/Kyoto_data/BenchmarkData-Description-v5.pdf
 
-Some of the infomation available in the data is listen below:
+Some of the infomation available in the data is listed below:
 
 * Data Fields:
   * Connection Date
