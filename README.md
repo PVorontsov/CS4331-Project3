@@ -12,14 +12,14 @@ A description of the data can be found here: http://www.takakura.com/Kyoto_data/
 
 Some of the infomation available in the data is listen below:
 
-** Data Fields
-  ** Connection Date
-  ** Connection Time
-  ** Host IP
-  ** Source IP
-  ** Service type
-  ** IDS detection
-  ** Malware detection
-  ** Shellcode detection
+* Data Fields
+  * Connection Date
+  * Connection Time
+  * Host IP
+  * Source IP
+  * Service type
+  * IDS detection
+  * Malware detection
+  * Shellcode detection
   
 For our visualization, we would like to show the connections in the data using networks.  The main relationships we want to show are different types of attacks (malware, shell code, etc.) that are launched on the different types of services (SMTP, DNS, HTTP, etc.) hosted by the various nodes on the cluster. Another possible interesting relationship we could visualize include the types of attacks and types of services attacked with the attacks originating from the same source IP addresses. In addition, we could add another dimension to the visualization by adding a time selector allowing the user to visualize the changes in the frequency and type of attacks over a given time period.
