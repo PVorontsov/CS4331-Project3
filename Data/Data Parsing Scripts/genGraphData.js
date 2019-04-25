@@ -49,21 +49,23 @@ fs.readFile(fileNameTxt, (err, data) => {
             var detectedMalware = valueArray[15] != '0' ? 'Yes' : 'No';
             var detectedShellCode = valueArray[16] != '0' ? 'Yes' : 'No';
 
-            var attackTypeStr = '';
-            if (detectedIDS === 'Yes') attackTypeStr += 'ids';
-            if (detectedMalware === 'Yes') {
-                if (attackTypeStr.length > 0) attackTypeStr += '-';
-                attackTypeStr += 'mal';
-            }
-            if (detectedShellCode === 'Yes') {
-                if (attackTypeStr.length > 0) attackTypeStr += '-';
-                attackTypeStr += "shc";
-            }
+            // var attackTypeStr = '';
+            // if (detectedIDS === 'Yes') attackTypeStr += 'ids';
+            // if (detectedMalware === 'Yes') {
+            //     if (attackTypeStr.length > 0) attackTypeStr += '/';
+            //     attackTypeStr += 'mal';
+            // }
+            // if (detectedShellCode === 'Yes') {
+            //     if (attackTypeStr.length > 0) attackTypeStr += '/';
+            //     attackTypeStr += "shc";
+            // }
 
-            attackSet.add('ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[22] + '-'  + valueArray[1] + '-&' + attackTypeStr);
-            attackString += '{\"nodeType\": \"attack\", \"id\": \" ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[22] + '-'  + valueArray[1] + '\", \"name\": \"ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[18].split(':')[7] + '-' + valueArray[1] + '\", \"date\": \"' + dataDate + '\", \"host\": \"' + valueArray[20] +'\", \"sourceIP\": \"' + valueArray[18] + '\", \"ids_detection\": \"' + detectedIDS + '\", \"malware_detection\": \"' + detectedMalware + '\", \"shellCode_detection\": \"' + detectedShellCode + '\"},';
+            // Generate attack nodes
+            attackSet.add('ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[22] + '-'  + valueArray[1] + '-' + valueArray[18].split(':')[7] + '-' + dataDate + '-' + valueArray[20] + '-' + valueArray[18] + '-' + detectedIDS + '-' + detectedMalware + '-' + detectedShellCode);
+            // attackString += '{\"nodeType\": \"attack\", \"id\": \"ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[22] + '-'  + valueArray[1] + '\", \"name\": \"ATT' + '-' + valueArray[20].split(':')[7] + '-' + valueArray[18].split(':')[7] + '-' + valueArray[1] + '\", \"date\": \"' + dataDate + '\", \"host\": \"' + valueArray[20] +'\", \"sourceIP\": \"' + valueArray[18] + '\", \"ids_detection\": \"' + detectedIDS + '\", \"malware_detection\": \"' + detectedMalware + '\", \"shellCode_detection\": \"' + detectedShellCode + '\"},';
         }
     }
+
     // Output destination IP nodes
     for (var item of destIPSet) {
         dataString += '{\"nodeType\": \"destIP\", \"id\": \"' + item.split(':')[7] + '\", \"name\": \"' + item + '\"},';
@@ -73,10 +75,16 @@ fs.readFile(fileNameTxt, (err, data) => {
         dataString += '{\"nodeType\": \"service\", \"id\": \"' + item + '\", \"name\": \"' + item.split('-')[0] + '\", \"host\": \"' + item.split('-')[1] + '\"},';
     }
 
+    for (var item of attackSet) {
+        var argArr = item.split('-');
+        dataString += '{\"nodeType\": \"attack\", \"id\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[2] + '-'  + argArr[3] + '\", \"name\": \"ATT' + '-' + argArr[1] + '-' + argArr[4] + '-' + argArr[3] + '\", \"date\": \"' + argArr[6] + '-' + argArr[7] + '-' + argArr[5] + '\", \"host\": \"' + argArr[8] +'\", \"sourceIP\": \"' + argArr[9] + '\", \"ids_detection\": \"' + argArr[10] + '\", \"malware_detection\": \"' + argArr[11] + '\", \"shellCode_detection\": \"' + argArr[12] + '\"},';
+    }
+
     // Concatenate the attackString to the dataString
-    dataString += attackString;
-        // Remove last comma
-        dataString = dataString.substring(0, dataString.length - 1);
+    // dataString += attackString;
+
+    // Remove last comma
+    dataString = dataString.substring(0, dataString.length - 1);
 
     dataString += '], \"links\": [';
 
@@ -104,9 +112,9 @@ fs.readFile(fileNameTxt, (err, data) => {
             var serviceLast4OfHostIP = serviceItem2.split('-')[1];
             var serviceType = serviceItem2.split('-')[0];
             var attackID = attackItem.split('&')[0];
-            attackID = attackID.substring(0, attackID.length - 1);
+            attackID = attackItem.split('-')[0] + '-' + attackItem.split('-')[1] + '-' + attackItem.split('-')[4] + '-' + attackItem.split('-')[2] + '-' + attackItem.split('-')[3];
             if (attackLast4OfDestIP === serviceLast4OfHostIP && attackService === serviceType) {
-                dataString += '{\"source\": \"' + serviceItem2 + '\", \"target\": \"' + attackID + '\", \"attackType\": \"' + attackItem.split('&')[1] + '\"},';
+                dataString += '{\"source\": \"' + serviceItem2 + '\", \"target\": \"' + attackID + '\"},';
             }
         }
     }

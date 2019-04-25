@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Graph Test</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+        .links line {
+            stroke: #999999;
+            stroke-opacity: 0.6;
+        }
+
+        .nodes circle {
+            stroke: #000000;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="graphDiv"></div>
+    <script>
+        const dataFileName = '20061101.json';
+
+        const width = document.documentElement.clientWidth;
+        const height = document.documentElement.clientHeight;
+
+        const svg = d3.select('#graphDiv')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        const sim = d3.forceSimulation()
+            .force("link", d3.forceLink().id(function(d) { return d.id; }))
+            .force("charge", d3.forceManyBody().strength(-75))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        d3.json(dataFileName, function (err, data) {
+            if (err) throw err;
+
+            const link = svg.append('g')
+                .attr('class', 'links')
+                .selectAll('line')
+                .data(data.links)
+                .enter()
+                .append('line')
+                .attr('stroke-width', 4);
+
+            link.append('title').text(function (d) {
+               return 'Source: ' + d.source + '\r\nTarget: ' + d.target;
+            });
+
+            const node = svg.append('g')
+                .attr('class', 'nodes')
+                .selectAll('g')
+                .data(data.nodes)
+                .enter()
+                .append('g');
+
+            node.append('circle')
+                .attr('r', 6)
+                .attr('fill', function (d) {
+                    if (d.nodeType === 'main') return '#fff2cc';
+                    if (d.nodeType === 'destIP') return '#ccfff2';
+                    if (d.nodeType === 'service') return '#ccd9ff';
+                    if (d.nodeType === 'attack') return '#d86c88';
+                })
+                .call(d3.drag()
+                    .on('start', dragStart)
+                    .on('drag', dragging)
+                    .on('end', dragEnd));
+
+            node.append('title').text(function (d) {
+                var nodeString = 'Type: ' + d.nodeType + '\r\nName: ' + d.name + '\r\nID: ' + d.id;
+                if (d.nodeType === 'service') nodeString += '\r\nHost: ' + d.host;
+                if (d.nodeType === 'attack') {
+                    nodeString += 'Host IP: ' + d.host + '\r\nSource IP: ' + d.sourceIP + '\r\nService: '+ d.id.split('-')[4]
+                        +'\r\nDate: ' + d.date + '\r\nTime: ' + d.id.split('-')[3] + '\r\nIDS Detection: ' + d.ids_detection
+                        +'\r\nMalware Detection: ' + d.malware_detection + '\r\nShell Code Detection: ' + d.shellCode_detection;
+                }
+                return nodeString;
+            });
+
+            sim.nodes(data.nodes)
+                .on('tick', ticked);
+
+            sim.force('link')
+                .links(data.links);
+
+            function ticked() {
+                link.attr('x1', function (d) {
+                    return d.source.x;
+                })
+                    .attr('y1', function (d) {
+                        return d.source.y;
+                    })
+                    .attr('x2', function (d) {
+                        return d.target.x;
+                    })
+                    .attr('y2', function (d) {
+                        return d.target.y;
+                    });
+
+                node.attr('transform', function (d) {
+                    return 'translate(' + d.x + ',' + d.y + ')';
+                });
+            }
+        });
+
+        function dragStart(d) {
+            if (!d3.event.active) {
+                sim.alphaTarget(0.3).restart();
+            }
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragging(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+        function dragEnd(d) {
+            if (!d3.event.active) {
+                sim.alphaTarget(0);
+            }
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Zoom properties
+        const zoom = d3.zoom()
+            .scaleExtent([0, 12])
+            // .translateExtent([[0, 0], [width, height]])
+            // .extent([[0, 0], [width, height]])
+            .on('zoom', zoomed);
+
+        // Call zoom function on svg zoom-base
+        svg.call(zoom);
+
+        // Zooming behavior
+        function zoomed() {
+            const transform = d3.event.transform;
+
+            // Geometrically zoom the nodes and links
+            const allLinks = d3.selectAll('.links');
+            const allNodes = d3.selectAll('.nodes');
+
+            allLinks.attr('transform', transform.toString());
+            allNodes.attr('transform', transform.toString());
+        }
+    </script>
+</body>
+</html>
