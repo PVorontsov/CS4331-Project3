@@ -1,9 +1,9 @@
 # CS4331-Project3
 
-### Network Example: 
+## Network Example: 
 https://jvermill91.github.io/CS4331-P3/networkExample.html
 
-### Data
+## Data
 Our data shows the network taffric for Kyoto University's [Honeypots](https://en.wikipedia.org/wiki/Honeypot_(computing)).
 
 The raw data is scource is from here: http://www.takakura.com/Kyoto_data/new_data201704/
@@ -12,7 +12,7 @@ A description of the data can be found here: http://www.takakura.com/Kyoto_data/
 
 Some of the infomation available in the data is listen below:
 
-* Data Fields
+* Data Fields:
   * Connection Date
   * Connection Time
   * Host IP
